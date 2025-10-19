@@ -9,6 +9,7 @@ type CarData = {
     price: number,
     year: number,
     model: string,
+    image: string,
 }
 
 export type ExtendedCarData = {
@@ -16,6 +17,7 @@ export type ExtendedCarData = {
     price: number,
     year: number,
     model: string,
+    image: string,
     apr: number,
     finance: number,
     lease: number,
@@ -102,7 +104,7 @@ export async function selectCars (
             lease: monthlyPaymentLease,
             inFinanceBudget: monthlyPaymentFinance <= budget,
             inLeaseBudget: monthlyPaymentLease <= budget,
-            ...data, // bodyType, price, year, and model native fields
+            ...data, // bodyType, price, year, model, and image native fields
         }
     })
 
