@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface AnimatingNumberProps {
@@ -8,7 +8,7 @@ interface AnimatingNumberProps {
   label?: string;
   prefix?: string;
   suffix?: string;
-  onChange?: (val: number) => void; // <-- added
+  onChange?: (val: number) => void;
 }
 
 export default function AnimatingNumber({
@@ -19,11 +19,21 @@ export default function AnimatingNumber({
   onChange,
 }: AnimatingNumberProps) {
   const [currentValue, setCurrentValue] = useState<string>(value.toString());
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Keep internal value in sync with prop
   useEffect(() => {
     setCurrentValue(value.toString());
   }, [value]);
+
+  // Focus input and move cursor to the end on mount
+  useEffect(() => {
+    if (inputRef.current) {
+      const input = inputRef.current;
+      input.focus();
+      input.setSelectionRange(input.value.length, input.value.length); // cursor at end
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -45,6 +55,7 @@ export default function AnimatingNumber({
       )}
       <div className="relative flex items-center justify-center">
         <input
+          ref={inputRef}
           type="text"
           value={currentValue}
           onChange={handleChange}
@@ -52,7 +63,7 @@ export default function AnimatingNumber({
           placeholder="0"
         />
         <div className="text-6xl sm:text-8xl md:text-9xl font-extrabold text-center flex items-center text-white">
-          {prefix && <span className="mr-2">{prefix}</span>}
+          {prefix && <span className="mr-1">{prefix}</span>}
           <AnimatePresence mode="popLayout">
             {animatedString.split("").map((char, index) => (
               <motion.span

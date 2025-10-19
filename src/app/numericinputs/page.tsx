@@ -22,61 +22,70 @@ export default function Numbers() {
   });
 
   const scrolling = useRef(false);
+  const SCROLL_DELAY = 500;
 
-  // Swipe up: update value and move forward, clamped
   const handleSwipeUp = (latestValue?: number) => {
     const currentId = numberInputs[activeIndex].id;
+    const nextIndex = Math.min(activeIndex + 1, numberInputs.length - 1);
 
-    setResponses((prev) => {
-      const updated = { ...prev, [currentId]: latestValue ?? prev[currentId] };
+    setResponses((prev) => ({
+      ...prev,
+      [currentId]: latestValue ?? prev[currentId],
+    }));
 
-      setActiveIndex((prev) => Math.min(prev + 1, numberInputs.length - 1));
+    setActiveIndex(nextIndex);
 
-      // If this was the last question
-      if (activeIndex === numberInputs.length - 1) {
-        console.log("All answers collected:", updated);
-        // router.push("/results") or API call here
-      }
-
-      return updated;
-    });
+    if (activeIndex === numberInputs.length - 1) {
+      console.log("All answers collected:", {
+        ...responses,
+        [currentId]: latestValue ?? responses[currentId],
+      });
+    }
   };
 
-  // Swipe down: move back, clamped
   const handleSwipeDown = () => {
     if (activeIndex === 0) {
-      router.push("/"); // Go home
+      router.push("/");
     } else {
       setActiveIndex((prev) => Math.max(prev - 1, 0));
     }
   };
 
   useEffect(() => {
+    let touchStartY = 0;
+
     const handleWheel = (e: WheelEvent) => {
       if (scrolling.current) return;
       if (Math.abs(e.deltaY) < 30) return;
-
       scrolling.current = true;
-      e.deltaY > 0
-        ? handleSwipeUp(responses[numberInputs[activeIndex]?.id])
-        : handleSwipeDown();
-      setTimeout(() => (scrolling.current = false), 500);
+
+      if (e.deltaY > 0) {
+        handleSwipeUp(responses[numberInputs[activeIndex]?.id]);
+      } else {
+        handleSwipeDown();
+      }
+
+      setTimeout(() => (scrolling.current = false), SCROLL_DELAY);
     };
 
-    let touchStartY = 0;
     const handleTouchStart = (e: TouchEvent) => {
       touchStartY = e.touches[0].clientY;
     };
+
     const handleTouchEnd = (e: TouchEvent) => {
-      const touchEndY = e.changedTouches[0].clientY;
       if (scrolling.current) return;
+      const touchEndY = e.changedTouches[0].clientY;
+      const delta = touchStartY - touchEndY;
+      if (Math.abs(delta) < 50) return;
 
       scrolling.current = true;
-      if (touchStartY - touchEndY > 50)
+      if (delta > 0) {
         handleSwipeUp(responses[numberInputs[activeIndex]?.id]);
-      else if (touchEndY - touchStartY > 50) handleSwipeDown();
+      } else {
+        handleSwipeDown();
+      }
 
-      setTimeout(() => (scrolling.current = false), 500);
+      setTimeout(() => (scrolling.current = false), SCROLL_DELAY);
     };
 
     window.addEventListener("wheel", handleWheel);
@@ -92,12 +101,10 @@ export default function Numbers() {
 
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center bg-red-600 relative px-4">
-      {/* Swipe-down hint */}
       <div className="absolute top-6 text-white text-sm opacity-80 animate-bounce">
         Swipe down to go back ↓
       </div>
 
-      {/* Active input */}
       <div className="flex-1 flex items-center justify-center w-full max-w-md">
         {numberInputs[activeIndex] && (
           <AnimatingNumber
@@ -116,12 +123,10 @@ export default function Numbers() {
         )}
       </div>
 
-      {/* Swipe-up hint */}
       <div className="absolute bottom-6 text-white text-sm opacity-80 animate-bounce">
         Swipe up to continue ↑
       </div>
 
-      {/* Progress indicator */}
       <div className="absolute bottom-16 text-white text-xs opacity-70">
         {activeIndex + 1} / {numberInputs.length}
       </div>
