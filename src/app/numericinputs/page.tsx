@@ -24,23 +24,26 @@ export default function Numbers() {
   const scrolling = useRef(false);
 
   // Swipe up: update value and move forward, clamped
+  // Swipe up: update value and move forward, clamped
   const handleSwipeUp = (latestValue?: number) => {
     const currentId = numberInputs[activeIndex].id;
-
-    setResponses((prev) => {
-      const updated = { ...prev, [currentId]: latestValue ?? prev[currentId] };
-
-      setActiveIndex((prev) => Math.min(prev + 1, numberInputs.length - 1));
-
-      // If this was the last question
-      if (activeIndex === numberInputs.length - 1) {
-        console.log("All answers collected:", updated);
-        // router.push("/results") or API call here
-      }
-
-      return updated;
-    });
+    const isLast = activeIndex === numberInputs.length - 1;
+  
+    const updatedResponses = {
+      ...responses,
+      [currentId]: latestValue ?? responses[currentId],
+    };
+  
+    if (isLast) {
+      console.log("All answers collected:", updatedResponses);
+      router.push("/cars"); // ✅ safe to navigate here
+    } else {
+      setResponses(updatedResponses);
+      setActiveIndex((prev) => prev + 1);
+    }
   };
+  
+
 
   // Swipe down: move back, clamped
   const handleSwipeDown = () => {
