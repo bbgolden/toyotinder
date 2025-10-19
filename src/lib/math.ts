@@ -1,0 +1,73 @@
+const getAPR = (creditScore: number, months: number): number => {
+    const isLowerBracket: boolean = months < 72;
+
+    // mock APR values based on Toyota estimations
+    if(creditScore < 580) {
+        return 0.18;
+    } else if(creditScore < 610) {
+        return isLowerBracket ? 0.1769 : 0.18;
+    } else if(creditScore < 630) {
+        return isLowerBracket ? 0.1553 : 0.18;
+    } else if(creditScore < 650) {
+        return isLowerBracket ? 0.1361 : 0.1399;
+    } else if(creditScore < 670) {
+        return isLowerBracket ? 0.1177 : 0.1257;
+    } else if(creditScore < 690) {
+        return isLowerBracket ? 0.949 : 0.1005;
+    }
+    return isLowerBracket ? 0.0872 : 0.0911;
+}
+
+const getMonthlyPaymentFinance = (
+        msrp: number, 
+        downPayment: number,
+        creditScore: number, 
+        months: number
+): number => {
+    const apr = getAPR(creditScore, months);
+
+    // accepted formula for monthly payment 
+    return (msrp - downPayment) 
+        * (apr / 12 * (1 + apr / 12) ** months) 
+        / ((1 + apr / 12) ** months - 1);
+}
+
+/**
+ * Get depreciation rate of a leased vehicle. Rates are mockups based on practical data.
+ * @param mileage mileage per year
+ * @returns depreciation rate of vehicle
+ */
+const getDepreciation = (mileage: number): number => {
+    if(mileage <= 7500) {
+        return 0.61;
+    } else if(mileage <= 10000) {
+        return 0.6;
+    } else if(mileage <= 12000) {
+        return 0.59;
+    } else if(mileage <= 15000) {
+        return 0.57;
+    } else if(mileage <= 18000) {
+        return 0.55;
+    } else if(mileage <= 20000) {
+        return 0.53;
+    } else if(mileage <= 25000) {
+        return 0.5;
+    }
+    return 0.46;
+}
+
+const getMonthlyPaymentLease = (
+    msrp: number,
+    downPayment: number,
+    creditScore: number,
+    months: number,
+    mileage: number,
+): number => {
+    const apr = getAPR(creditScore, months);
+    const presentValue = msrp - downPayment;
+    const depreciatedValue = msrp * getDepreciation(mileage);
+
+    // accepted formula for monthly payment
+    return (presentValue - depreciatedValue / ((1 + apr / 12) ** months)) 
+        / (1 - apr / 12 / (1 + (1 + apr / 12) ** months));
+}
