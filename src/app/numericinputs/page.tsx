@@ -26,37 +26,27 @@ export default function Numbers() {
 
   // Swipe up: update value and move forward, clamped
   const handleSwipeUp = (latestValue?: number) => {
-    const currentId = numberInputs[activeIndex].id;
-    const nextIndex = Math.min(activeIndex + 1, numberInputs.length - 1);
+  const currentId = numberInputs[activeIndex].id;
 
-    setResponses((prev) => ({
-      ...prev,
-      [currentId]: latestValue ?? prev[currentId],
-    }));
+  // Update responses
+  setResponses((prev) => ({
+    ...prev,
+    [currentId]: latestValue ?? prev[currentId],
+  }));
 
-    setActiveIndex(nextIndex);
-
-    if (activeIndex === numberInputs.length - 1) {
-      console.log("All answers collected:", {
-        ...responses,
-        [currentId]: latestValue ?? responses[currentId],
-      });
-    }
-    const isLast = activeIndex === numberInputs.length - 1;
-  
-    const updatedResponses = {
+  // Check if last question
+  if (activeIndex === numberInputs.length - 1) {
+    console.log("All answers collected:", {
       ...responses,
       [currentId]: latestValue ?? responses[currentId],
-    };
-  
-    if (isLast) {
-      console.log("All answers collected:", updatedResponses);
-      router.push("/cars"); // ✅ safe to navigate here
-    } else {
-      setResponses(updatedResponses);
-      setActiveIndex((prev) => prev + 1);
-    }
-  };
+    });
+    router.push("/cars"); // ✅ navigate safely
+  } else {
+    // Move to next index, clamped
+    setActiveIndex((prev) => Math.min(prev + 1, numberInputs.length - 1));
+  }
+};
+
   
 
 
