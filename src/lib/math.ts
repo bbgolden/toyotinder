@@ -1,7 +1,14 @@
+/**
+ * @description
+ * Calculate APR based on Toyota estimations.
+ * @param creditScore user's credit score
+ * @param months user's preferred term length
+ * @returns appropriate mock APR
+ */
 const getAPR = (creditScore: number, months: number): number => {
     const isLowerBracket: boolean = months < 72;
 
-    // mock APR values based on Toyota estimations
+    // mock APR values
     if(creditScore < 580) {
         return 0.18;
     } else if(creditScore < 610) {
@@ -18,6 +25,15 @@ const getAPR = (creditScore: number, months: number): number => {
     return isLowerBracket ? 0.0872 : 0.0911;
 }
 
+/**
+ * @description
+ * Get monthly payment required to finance a vehicle given msrp and the downPayment.
+ * @param msrp the retail price of the car, not including DPH
+ * @param downPayment user's preferred down payment
+ * @param creditScore user's credit score
+ * @param months user's preferred term length
+ * @returns approximate monthly finance payment
+ */
 const getMonthlyPaymentFinance = (
         msrp: number, 
         downPayment: number,
@@ -33,6 +49,7 @@ const getMonthlyPaymentFinance = (
 }
 
 /**
+ * @description
  * Get depreciation rate of a leased vehicle. Rates are mockups based on practical data.
  * @param mileage mileage per year
  * @returns depreciation rate of vehicle
@@ -56,6 +73,17 @@ const getDepreciation = (mileage: number): number => {
     return 0.46;
 }
 
+/**
+ * @description
+ * Get monthly payment required to lease a vehicle given msrp, the downPayment, and estimated yearly
+ * mileage.
+ * @param msrp the retail price of the car, not including DPH
+ * @param downPayment user's preferred down payment
+ * @param creditScore user's credit score
+ * @param months user's preferred term length
+ * @param mileage user's estimated yearly mileage
+ * @returns approximate monthly lease payment
+ */
 const getMonthlyPaymentLease = (
     msrp: number,
     downPayment: number,
