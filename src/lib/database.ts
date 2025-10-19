@@ -58,13 +58,34 @@ export async function selectCars(
     const docsWithPricing = rawDocs.docs.map(doc => {
         const data: CarData = doc.data();
 
+        const monthlyPaymentFinance = getMonthlyPaymentFinance
+        (
+            data.price, 
+            downPayment, 
+            creditScore, 
+            term,
+        );
+
+        const monthlyPaymentLease = getMonthlyPaymentLease
+        (
+            data.price, 
+            downPayment, 
+            creditScore, 
+            term, 
+            mileage,
+        );
         return {
-            ...data,
+            ...data, // bodyType, price, year, and model native fields
             apr: getAPR(creditScore, term), 
-            finance: getMonthlyPaymentFinance(data.price, downPayment, creditScore, term),
-            lease: getMonthlyPaymentLease(data.price, downPayment, creditScore, term, mileage),
+            finance: monthlyPaymentFinance,
+            lease: monthlyPaymentLease,
+            inFinanceBudget: monthlyPaymentFinance <= budget,
+            inLeaseBudget: monthlyPaymentLease <= budget,
         }
     })
 
-    return docsWithPricing.toSorted((a, b) => (budget - a.price) - (budget - b.price));
+    // sort elements by adherence to budget, with in budget items coming first
+    // considers adherence to finance budget and lease budget cumulatively
+    return docsWithPricing.toSorted((a, b) => 
+        (budget - a.finance) - (budget - b.finance) + (budget - a.lease) - (budget - b.lease));
 }
