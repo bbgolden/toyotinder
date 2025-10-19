@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface AnimatingNumberProps {
   value?: number | string;
   label?: string;
-  prefix?: string; // optional text before the number
-  suffix?: string; // optional text after the number
+  prefix?: string;
+  suffix?: string;
+  onChange?: (val: number) => void; // <-- added
 }
 
 export default function AnimatingNumber({
@@ -15,17 +16,25 @@ export default function AnimatingNumber({
   label = "",
   prefix = "",
   suffix = "",
+  onChange,
 }: AnimatingNumberProps) {
   const [currentValue, setCurrentValue] = useState<string>(value.toString());
 
+  // Keep internal value in sync with prop
+  useEffect(() => {
+    setCurrentValue(value.toString());
+  }, [value]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrentValue(e.target.value);
+    const val = e.target.value;
+    if (/^\d*$/.test(val)) {
+      setCurrentValue(val);
+      onChange && onChange(Number(val));
+    }
   };
 
   const displayValue = currentValue === "" ? "0" : currentValue;
-
-  // Combine value + suffix, preserve spaces using non-breaking space
-  const animatedString = displayValue + (suffix ? "\u00A0" + suffix : "");
+  const animatedString = displayValue + (suffix ?? "");
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -34,21 +43,16 @@ export default function AnimatingNumber({
           {label}
         </span>
       )}
-
       <div className="relative flex items-center justify-center">
-        {/* Invisible input for typing */}
         <input
           type="text"
           value={currentValue}
           onChange={handleChange}
-          className="absolute inset-0 text-6xl sm:text-8xl md:text-9xl font-extrabold text-center opacity-0 focus:outline-none bg-transparent border-none w-full"
+          className="absolute inset-0 text-6xl sm:text-8xl md:text-9xl font-extrabold text-center text-transparent caret-white bg-transparent focus:outline-none w-full"
           placeholder="0"
         />
-
-        {/* Animated number display with prefix + suffix */}
         <div className="text-6xl sm:text-8xl md:text-9xl font-extrabold text-center flex items-center text-white">
           {prefix && <span className="mr-2">{prefix}</span>}
-
           <AnimatePresence mode="popLayout">
             {animatedString.split("").map((char, index) => (
               <motion.span
@@ -57,7 +61,9 @@ export default function AnimatingNumber({
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -20, opacity: 0 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
-                className="inline-block"
+                className={`inline-block ${
+                  displayValue === "0" && char === "0" ? "opacity-0" : "opacity-100"
+                }`}
               >
                 {char}
               </motion.span>
