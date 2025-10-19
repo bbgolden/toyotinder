@@ -17,30 +17,37 @@ export default function Numbers() {
   ];
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [responses, setResponses] = useState<Record<number, number>>({});
+  const [responses, setResponses] = useState<Record<number, number>>({
+    1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0,
+  });
+
   const scrolling = useRef(false);
 
-const handleSwipeUp = () => {
-  const currentInput = numberInputs[activeIndex];
-  const currentValue = responses[currentInput.id] ?? 0;
+  // Swipe up: update value and move forward, clamped
+  const handleSwipeUp = (latestValue?: number) => {
+    const currentId = numberInputs[activeIndex].id;
 
-  if (activeIndex < numberInputs.length - 1) {
-    setActiveIndex((prev) => prev + 1);
-  } else {
-    // Use the latest value from state + current input
-    console.log("All answers collected:", {
-      ...responses,
-      [currentInput.id]: currentValue,
+    setResponses((prev) => {
+      const updated = { ...prev, [currentId]: latestValue ?? prev[currentId] };
+
+      setActiveIndex((prev) => Math.min(prev + 1, numberInputs.length - 1));
+
+      // If this was the last question
+      if (activeIndex === numberInputs.length - 1) {
+        console.log("All answers collected:", updated);
+        // router.push("/results") or API call here
+      }
+
+      return updated;
     });
-    // TODO: router.push("/results") or API call
-  }
-};
+  };
 
+  // Swipe down: move back, clamped
   const handleSwipeDown = () => {
     if (activeIndex === 0) {
-      router.push("/"); // Go back to home
+      router.push("/"); // Go home
     } else {
-      setActiveIndex((prev) => prev - 1);
+      setActiveIndex((prev) => Math.max(prev - 1, 0));
     }
   };
 
@@ -50,7 +57,9 @@ const handleSwipeUp = () => {
       if (Math.abs(e.deltaY) < 30) return;
 
       scrolling.current = true;
-      e.deltaY > 0 ? handleSwipeUp() : handleSwipeDown();
+      e.deltaY > 0
+        ? handleSwipeUp(responses[numberInputs[activeIndex]?.id])
+        : handleSwipeDown();
       setTimeout(() => (scrolling.current = false), 500);
     };
 
@@ -63,7 +72,8 @@ const handleSwipeUp = () => {
       if (scrolling.current) return;
 
       scrolling.current = true;
-      if (touchStartY - touchEndY > 50) handleSwipeUp();
+      if (touchStartY - touchEndY > 50)
+        handleSwipeUp(responses[numberInputs[activeIndex]?.id]);
       else if (touchEndY - touchStartY > 50) handleSwipeDown();
 
       setTimeout(() => (scrolling.current = false), 500);
@@ -78,7 +88,7 @@ const handleSwipeUp = () => {
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchend", handleTouchEnd);
     };
-  }, [activeIndex, router]);
+  }, [activeIndex, responses]);
 
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center bg-red-600 relative px-4">
@@ -89,19 +99,21 @@ const handleSwipeUp = () => {
 
       {/* Active input */}
       <div className="flex-1 flex items-center justify-center w-full max-w-md">
-        <AnimatingNumber
-          key={numberInputs[activeIndex].id}
-          label={numberInputs[activeIndex].label}
-          prefix={numberInputs[activeIndex].prefix}
-          suffix={numberInputs[activeIndex].suffix}
-          value={responses[numberInputs[activeIndex].id] ?? 0}
-          onChange={(val) =>
-            setResponses((prev) => ({
-              ...prev,
-              [numberInputs[activeIndex].id]: val,
-            }))
-          }
-        />
+        {numberInputs[activeIndex] && (
+          <AnimatingNumber
+            key={numberInputs[activeIndex].id}
+            label={numberInputs[activeIndex].label}
+            prefix={numberInputs[activeIndex].prefix}
+            suffix={numberInputs[activeIndex].suffix}
+            value={responses[numberInputs[activeIndex].id]}
+            onChange={(val) =>
+              setResponses((prev) => ({
+                ...prev,
+                [numberInputs[activeIndex].id]: val,
+              }))
+            }
+          />
+        )}
       </div>
 
       {/* Swipe-up hint */}
