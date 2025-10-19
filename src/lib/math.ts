@@ -1,12 +1,16 @@
+// discrete allowed values for term length
+type TermLength = 24 | 36 | 48 | 60 | 72;
+
 /**
  * @description
  * Calculate APR based on Toyota estimations.
  * @param creditScore user's credit score
- * @param months user's preferred term length
+ * @param months user's preferred term length in months
  * @returns appropriate mock APR
  */
-const getAPR = (creditScore: number, months: number): number => {
-    const isLowerBracket: boolean = months < 72;
+const getAPR = (creditScore: number, months: TermLength): number => {
+    // APR values are lower for term lengths less than 72 months
+    const isLowerBracket = months < 72;
 
     // mock APR values
     if(creditScore < 580) {
@@ -14,12 +18,14 @@ const getAPR = (creditScore: number, months: number): number => {
     } else if(creditScore < 610) {
         return isLowerBracket ? 0.1769 : 0.18;
     } else if(creditScore < 630) {
-        return isLowerBracket ? 0.1553 : 0.18;
+        return isLowerBracket ? 0.1553 : 0.1699;
     } else if(creditScore < 650) {
         return isLowerBracket ? 0.1361 : 0.1399;
     } else if(creditScore < 670) {
-        return isLowerBracket ? 0.1177 : 0.1257;
+        return isLowerBracket ? 0.1252 : 0.1298;
     } else if(creditScore < 690) {
+        return isLowerBracket ? 0.1177 : 0.1257;
+    } else if(creditScore < 720) {
         return isLowerBracket ? 0.949 : 0.1005;
     }
     return isLowerBracket ? 0.0872 : 0.0911;
@@ -31,14 +37,14 @@ const getAPR = (creditScore: number, months: number): number => {
  * @param msrp the retail price of the car, not including DPH
  * @param downPayment user's preferred down payment
  * @param creditScore user's credit score
- * @param months user's preferred term length
+ * @param months user's preferred term length in months
  * @returns approximate monthly finance payment
  */
 const getMonthlyPaymentFinance = (
         msrp: number, 
         downPayment: number,
         creditScore: number, 
-        months: number
+        months: TermLength
 ): number => {
     const apr = getAPR(creditScore, months);
 
@@ -80,7 +86,7 @@ const getDepreciation = (mileage: number): number => {
  * @param msrp the retail price of the car, not including DPH
  * @param downPayment user's preferred down payment
  * @param creditScore user's credit score
- * @param months user's preferred term length
+ * @param months user's preferred term length in months
  * @param mileage user's estimated yearly mileage
  * @returns approximate monthly lease payment
  */
@@ -88,7 +94,7 @@ const getMonthlyPaymentLease = (
     msrp: number,
     downPayment: number,
     creditScore: number,
-    months: number,
+    months: TermLength,
     mileage: number,
 ): number => {
     const apr = getAPR(creditScore, months);
