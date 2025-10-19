@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import emailjs from "@emailjs/browser";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,14 +25,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"/>
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
       </body>
+      <Script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"/>
     </html>
   );
 }
