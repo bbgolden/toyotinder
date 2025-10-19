@@ -17,21 +17,15 @@ const BackButton: React.FC<BackButtonProps> = ({ to }) => {
   return (
     <button
       onClick={handleClick}
-      className="absolute top-4 left-4 p-1 hover:opacity-80 transition"
-      style={{ background: "transparent", border: "none" }}
+      className="absolute top-4 left-4 px-4 py-2 rounded hover:bg-blue-600 transition flex items-center justify-center"
     >
-      {/* Use PNG */}
-      <Image src="/restart.png" alt="Back" width={24} height={24} />
-
-      {/* Or use Material Symbol */}
-      {/* 
-      <span
-        className="material-symbols-outlined text-black text-2xl"
-        style={{ fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24" }}
-      >
-        restart_alt
-      </span> 
-      */}
+      <Image
+        src="/undo-left-svgrepo-com.svg"
+        alt="Back"
+        width={36}
+        height={36}
+        className="invert" // turns black SVG to white
+      />
     </button>
   );
 };
