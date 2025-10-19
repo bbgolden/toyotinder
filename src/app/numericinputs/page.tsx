@@ -24,6 +24,7 @@ export default function Numbers() {
   const scrolling = useRef(false);
   const SCROLL_DELAY = 500;
 
+  // Swipe up: update value and move forward, clamped
   const handleSwipeUp = (latestValue?: number) => {
     const currentId = numberInputs[activeIndex].id;
     const nextIndex = Math.min(activeIndex + 1, numberInputs.length - 1);
@@ -41,7 +42,23 @@ export default function Numbers() {
         [currentId]: latestValue ?? responses[currentId],
       });
     }
+    const isLast = activeIndex === numberInputs.length - 1;
+  
+    const updatedResponses = {
+      ...responses,
+      [currentId]: latestValue ?? responses[currentId],
+    };
+  
+    if (isLast) {
+      console.log("All answers collected:", updatedResponses);
+      router.push("/cars"); // ✅ safe to navigate here
+    } else {
+      setResponses(updatedResponses);
+      setActiveIndex((prev) => prev + 1);
+    }
   };
+  
+
 
   const handleSwipeDown = () => {
     if (activeIndex === 0) {
