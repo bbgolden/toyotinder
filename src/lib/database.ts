@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import type { QueryDocumentSnapshot } from "firebase/firestore";
-import { getFirestore, collection, query, orderBy, getDocs } from "firebase/firestore";
+import { getFirestore, collection, query, where, orderBy, getDocs } from "firebase/firestore";
 import type { TermLength } from "@/lib/math";
 import { getAPR, getMonthlyPaymentFinance, getMonthlyPaymentLease } from "@/lib/math";
 
@@ -9,6 +9,18 @@ type CarData = {
     price: number,
     year: number,
     model: string,
+}
+
+export type ExtendedCarData = {
+    bodyType: string,
+    price: number,
+    year: number,
+    model: string,
+    apr: number,
+    finance: number,
+    lease: number,
+    inFinanceBudget: boolean,
+    inLeaseBudget: boolean,
 }
 
 const firebaseConfig = {
@@ -31,6 +43,16 @@ const carDataConverter = {
     fromFirestore: (snap: QueryDocumentSnapshot) => snap.data() as CarData,
 }
 
+export async function selectSingle(model: string) {
+    const results = query(
+        collection(firestore, "cars").withConverter(carDataConverter),
+        where("model", "==", model),
+    );
+
+    const rawDoc = await getDocs(results);
+    return rawDoc.docs.map(doc => {return {...doc.data()}})[0];
+}
+
 /**
  * Select cars in an ordered fashion. The primary ordering is by budget, with cars that fit within
  * the specific monthly budget coming first. The secondary ordering is by price, with more expensive
@@ -42,13 +64,13 @@ const carDataConverter = {
  * @param mileage user's estimated annual mileage
  * @returns a Promise to an ordered sequence of cars
  */
-export async function selectCars(
+export async function selectCars (
     budget: number,
     downPayment: number,
     creditScore: number,
     term: TermLength,
     mileage: number,
-) {
+): Promise<ExtendedCarData[]> {
     const results = query(
         collection(firestore, "cars").withConverter(carDataConverter),
         orderBy("price", "desc"),
@@ -75,12 +97,12 @@ export async function selectCars(
             mileage,
         );
         return {
-            ...data, // bodyType, price, year, and model native fields
             apr: getAPR(creditScore, term), 
             finance: monthlyPaymentFinance,
             lease: monthlyPaymentLease,
             inFinanceBudget: monthlyPaymentFinance <= budget,
             inLeaseBudget: monthlyPaymentLease <= budget,
+            ...data, // bodyType, price, year, and model native fields
         }
     })
 
