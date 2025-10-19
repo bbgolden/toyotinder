@@ -1,5 +1,5 @@
 // discrete allowed values for term length
-type TermLength = 24 | 36 | 48 | 60 | 72;
+export type TermLength = 24 | 36 | 48 | 60 | 72;
 
 /**
  * @description
@@ -8,7 +8,7 @@ type TermLength = 24 | 36 | 48 | 60 | 72;
  * @param months user's preferred term length in months
  * @returns appropriate mock APR
  */
-const getAPR = (creditScore: number, months: TermLength): number => {
+export const getAPR = (creditScore: number, months: TermLength): number => {
     // APR values are lower for term lengths less than 72 months
     const isLowerBracket = months < 72;
 
@@ -40,7 +40,7 @@ const getAPR = (creditScore: number, months: TermLength): number => {
  * @param months user's preferred term length in months
  * @returns approximate monthly finance payment
  */
-const getMonthlyPaymentFinance = (
+export const getMonthlyPaymentFinance = (
         msrp: number, 
         downPayment: number,
         creditScore: number, 
@@ -61,6 +61,7 @@ const getMonthlyPaymentFinance = (
  * @returns depreciation rate of vehicle
  */
 const getDepreciation = (mileage: number): number => {
+    // assume that there is no greater depreciation above 30,000 annual mileage
     if(mileage <= 7500) {
         return 0.61;
     } else if(mileage <= 10000) {
@@ -87,10 +88,10 @@ const getDepreciation = (mileage: number): number => {
  * @param downPayment user's preferred down payment
  * @param creditScore user's credit score
  * @param months user's preferred term length in months
- * @param mileage user's estimated yearly mileage
+ * @param mileage user's estimated annual mileage
  * @returns approximate monthly lease payment
  */
-const getMonthlyPaymentLease = (
+export const getMonthlyPaymentLease = (
     msrp: number,
     downPayment: number,
     creditScore: number,
