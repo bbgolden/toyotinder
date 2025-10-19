@@ -66,5 +66,5 @@ export async function selectCars(
         }
     })
 
-    return docsWithPricing.toSorted((a, b) => (a.price - budget) - (b.price - budget));
+    return docsWithPricing.toSorted((a, b) => (budget - a.price) - (budget - b.price));
 }
