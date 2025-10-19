@@ -35,7 +35,7 @@ export default function Numbers() {
       // If this was the last question
       if (activeIndex === numberInputs.length - 1) {
         console.log("All answers collected:", updated);
-        // router.push("/results") or API call here
+        router.push(`/results?o=${responses[1]}&t=${responses[2]}&th=${responses[3]}&f=${responses[4]}&fi=${responses[5]}&s=${responses[6]}&`);
       }
 
       return updated;
