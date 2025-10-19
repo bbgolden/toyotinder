@@ -36,7 +36,17 @@ export default function Numbers() {
   
     if (isLast) {
       console.log("All answers collected:", updatedResponses);
-      router.push("/cars"); // ✅ safe to navigate here
+    
+      const query = new URLSearchParams({
+        budget: updatedResponses[1].toString(),
+        termYears: updatedResponses[2].toString(),
+        commuteDays: updatedResponses[3].toString(),
+        commuteMiles: updatedResponses[4].toString(),
+        downPayment: updatedResponses[5].toString(),
+        creditScore: updatedResponses[6].toString(),
+      }).toString();
+    
+      router.push(`/cars?${query}`);
     } else {
       setResponses(updatedResponses);
       setActiveIndex((prev) => prev + 1);

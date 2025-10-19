@@ -26,7 +26,7 @@ export const getAPR = (creditScore: number, months: TermLength): number => {
     } else if(creditScore < 690) {
         return isLowerBracket ? 0.1177 : 0.1257;
     } else if(creditScore < 720) {
-        return isLowerBracket ? 0.949 : 0.1005;
+        return isLowerBracket ? 0.0949 : 0.1005;
     }
     return isLowerBracket ? 0.0872 : 0.0911;
 }
