@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@dataconnect/generated": "file:src/dataconnect-generated",
+    "@emailjs/browser": "^4.4.1",
+    "emailjs": "^4.0.3",
     "firebase": "^12.4.0",
     "firebase-tools": "^14.20.0",
     "framer-motion": "^12.23.24",
