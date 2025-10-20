@@ -84,10 +84,25 @@ export default function CarsPage() {
       </h1>
 
       <div className="max-w-3xl mx-auto mb-8 bg-white rounded-lg shadow-md p-4 text-sm text-gray-700">
-        <p><span className="font-semibold">Credit Score:</span> {creditScore}</p>
-        <p><span className="font-semibold">Down Payment:</span> ${downPayment}</p>
-        <p><span className="font-semibold">Term:</span> {term} months</p>
-        <p><span className="font-semibold">Estimated Mileage:</span> {mileage.toLocaleString()} mi/year</p>
+
+        <p>
+          <span className="font-semibold">Monthly Budget:</span> {`$${budget}`}
+        </p>
+
+        <p>
+          <span className="font-semibold">Credit Score:</span> {creditScore}
+        </p>
+
+        <p>
+          <span className="font-semibold">Down Payment:</span> ${downPayment}
+        </p>
+        <p>
+          <span className="font-semibold">Term:</span> {term} months
+        </p>
+        <p>
+          <span className="font-semibold">Estimated Mileage:</span>{" "}
+          {mileage.toLocaleString()} mi/year
+        </p>
       </div>
 
       {cars.length === 0 ? (
@@ -110,12 +125,20 @@ export default function CarsPage() {
               mileage
             );
 
+            // ✅ Matching logic
+            const isFinanceMatch = finance <= budget // within $50 range
+            const isLeaseMatch = lease <= budget;
+            const isDownPaymentMatch =
+              Math.abs(car.price * 0.1 - downPayment) < 500; // arbitrary 10% baseline
+
             return (
               <div
                 key={car.id}
                 className="relative rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group"
                 style={{
-                  backgroundImage: car.image ? `url(${car.image})` : "url(/default-car.jpg)",
+                  backgroundImage: car.image
+                    ? `url(${car.image})`
+                    : "url(/default-car.jpg)",
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   height: "350px",
@@ -136,9 +159,37 @@ export default function CarsPage() {
                   <p className="text-xs opacity-90">{car.bodyType || "—"}</p>
 
                   <div className="mt-3 text-xs space-y-1">
-                    <p><span className="font-semibold">APR:</span> {(apr * 100).toFixed(2)}%</p>
-                    <p><span className="font-semibold">Finance:</span> ${finance.toFixed(2)}/mo</p>
-                    <p><span className="font-semibold">Lease:</span> ${lease.toFixed(2)}/mo</p>
+                    <p>
+                      <span className="font-semibold">APR:</span>{" "}
+                      {(apr * 100).toFixed(2)}%
+                    </p>
+                    <p
+                      className={
+                        isFinanceMatch
+                          ? "font-semibold text-green-400"
+                          : "font-semibold"
+                      }
+                    >
+                      Finance: ${finance.toFixed(2)}/mo
+                    </p>
+                    <p
+                      className={
+                        isLeaseMatch
+                          ? "font-semibold text-green-400"
+                          : "font-semibold"
+                      }
+                    >
+                      Lease: ${lease.toFixed(2)}/mo
+                    </p>
+                    <p
+                      className={
+                        isDownPaymentMatch
+                          ? "font-semibold text-green-400"
+                          : "font-semibold"
+                      }
+                    >
+                      Down Payment Match: ${downPayment.toFixed(2)}
+                    </p>
                   </div>
 
                   {car.features && car.features.length > 0 && (
