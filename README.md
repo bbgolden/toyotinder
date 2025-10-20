@@ -13,7 +13,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 
 
-![Uploading {21864C42-B2DE-4409-86C5-E88D0D91776F}.png…]()
+<img width="1915" height="861" alt="{21864C42-B2DE-4409-86C5-E88D0D91776F}" src="https://github.com/user-attachments/assets/db422374-dfb4-422c-9a2c-01202a5e7c76" />
+
 
 
 
