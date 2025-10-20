@@ -79,20 +79,17 @@ export default function CarsPage() {
 
   return (
     <div className="min-h-screen bg-gray-200 py-8 px-4 sm:px-8">
-      <h1 className="text-3xl font-bold text-center text-black-600 mb-6">
+      <h1 className="text-3xl font-bold text-center text-black mb-6">
         Here's your vehicle finance report!
       </h1>
 
       <div className="max-w-3xl mx-auto mb-8 bg-white rounded-lg shadow-md p-4 text-sm text-gray-700">
-
         <p>
-          <span className="font-semibold">Monthly Budget:</span> {`$${budget}`}
+          <span className="font-semibold">Monthly Budget:</span> ${budget}
         </p>
-
         <p>
           <span className="font-semibold">Credit Score:</span> {creditScore}
         </p>
-
         <p>
           <span className="font-semibold">Down Payment:</span> ${downPayment}
         </p>
@@ -125,11 +122,14 @@ export default function CarsPage() {
               mileage
             );
 
+            // ✅ Calculate what the "recommended" down payment would be for this car (10% baseline)
+            const carDownPayment = car.price * 0.1;
+
             // ✅ Matching logic
-            const isFinanceMatch = finance <= budget // within $50 range
+            const isFinanceMatch = finance <= budget;
             const isLeaseMatch = lease <= budget;
             const isDownPaymentMatch =
-              Math.abs(car.price * 0.1 - downPayment) < 500; // arbitrary 10% baseline
+              Math.abs(carDownPayment - downPayment) < 500;
 
             return (
               <div
@@ -188,7 +188,7 @@ export default function CarsPage() {
                           : "font-semibold"
                       }
                     >
-                      Down Payment Match: ${downPayment.toFixed(2)}
+                      Suggested Down: ${carDownPayment.toFixed(2)}
                     </p>
                   </div>
 
