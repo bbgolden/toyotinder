@@ -6,15 +6,21 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+
+
+
+<img width="1920" height="948" alt="{7DE143F8-7092-488C-B109-3B81C933B299}" src="https://github.com/user-attachments/assets/99b7ebf1-422a-46c8-bb22-b363875ef177" />
+
+
+
+<img width="1919" height="875" alt="{A22D5383-8407-40C2-BB17-457302F989A7}" src="https://github.com/user-attachments/assets/74dc364f-5663-4720-9115-1828028b047c" />
+
+<img width="1919" height="930" alt="{007494BF-20C1-4701-A456-64EF4E857418}" src="https://github.com/user-attachments/assets/083796b9-2f1e-45b6-8f87-467f51e6871a" />
+
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
