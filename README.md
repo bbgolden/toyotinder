@@ -13,7 +13,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 
 
-<img width="1901" height="947" alt="{A3758F97-1DCC-432C-899C-749561F8C6AA}" src="https://github.com/user-attachments/assets/4a707877-2461-4001-bae7-04cb603bae2d" />
+<img width="1920" height="948" alt="{7DE143F8-7092-488C-B109-3B81C933B299}" src="https://github.com/user-attachments/assets/99b7ebf1-422a-46c8-bb22-b363875ef177" />
+
 
 
 <img width="1919" height="875" alt="{A22D5383-8407-40C2-BB17-457302F989A7}" src="https://github.com/user-attachments/assets/74dc364f-5663-4720-9115-1828028b047c" />
