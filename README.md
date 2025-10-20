@@ -13,7 +13,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 
 
-<img width="1920" height="948" alt="{7DE143F8-7092-488C-B109-3B81C933B299}" src="https://github.com/user-attachments/assets/99b7ebf1-422a-46c8-bb22-b363875ef177" />
+![Uploading {21864C42-B2DE-4409-86C5-E88D0D91776F}.png…]()
+
 
 
 
