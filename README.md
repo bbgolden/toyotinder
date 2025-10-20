@@ -10,12 +10,15 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-<img width="428" height="944" alt="{72543882-9A47-4665-8A9D-644263E59A9D}" src="https://github.com/user-attachments/assets/2d0fe062-f378-4c7f-b543-71491e5a1e0c" />
+
 
 
 <img width="1901" height="947" alt="{A3758F97-1DCC-432C-899C-749561F8C6AA}" src="https://github.com/user-attachments/assets/4a707877-2461-4001-bae7-04cb603bae2d" />
 
-<img width="736" height="943" alt="{17A604A1-9015-44B5-BBA2-61315C099FD6}" src="https://github.com/user-attachments/assets/a108aeba-a3b0-4448-aa68-3e77ba1ff540" />
+
+<img width="1919" height="875" alt="{A22D5383-8407-40C2-BB17-457302F989A7}" src="https://github.com/user-attachments/assets/74dc364f-5663-4720-9115-1828028b047c" />
+
+<img width="1919" height="930" alt="{007494BF-20C1-4701-A456-64EF4E857418}" src="https://github.com/user-attachments/assets/083796b9-2f1e-45b6-8f87-467f51e6871a" />
 
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
