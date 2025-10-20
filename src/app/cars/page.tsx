@@ -78,9 +78,9 @@ export default function CarsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-8">
-      <h1 className="text-3xl font-bold text-center text-red-600 mb-6">
-        Available Cars
+    <div className="min-h-screen bg-gray-200 py-8 px-4 sm:px-8">
+      <h1 className="text-3xl font-bold text-center text-black-600 mb-6">
+        Here's your vehicle finance report!
       </h1>
 
       <div className="max-w-3xl mx-auto mb-8 bg-white rounded-lg shadow-md p-4 text-sm text-gray-700">
